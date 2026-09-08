@@ -1,0 +1,200 @@
+:root {
+  --bg: #0e1116;
+  --surface-1: #161b23;
+  --surface-2: #1d232d;
+  --border: #2b3340;
+  --text: #e6edf3;
+  --text-secondary: #b3bfcc;
+  --text-muted: #8b98a8;
+  --accent: #4fa3ff;
+  --accent-warm: #ffb648;
+  --gold: #ffc94a;
+  --silver: #c9d3de;
+  --bronze: #cf9068;
+  --danger: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN",
+    "Noto Sans JP", Meiryo, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: var(--accent);
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+  line-height: 1.35;
+  margin: 0 0 0.35rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  line-height: 1.5;
+  margin: 2rem 0 0.5rem;
+}
+
+.sub {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* 図・表は横に溢れさせない。溢れる場合はその中でスクロールさせる */
+.scroll-x {
+  overflow-x: auto;
+}
+
+/* ── ホームのメニュー(原仕様 §40)───────────────────────── */
+.hero {
+  padding: 2.5rem 0 1.5rem;
+}
+
+.hero__title {
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  margin: 0;
+  font-weight: 800;
+}
+
+.hero__tagline {
+  color: var(--text-secondary);
+  margin: 0.9rem 0 0;
+  font-size: 1rem;
+}
+
+.menu {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu__item {
+  margin: 0;
+}
+
+/* タップ領域は 44px 以上(SPEC N-06 / 原仕様 §46) */
+.menu__link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 64px;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-1);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.menu__link:hover,
+.menu__link:focus-visible {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.menu__link--primary {
+  border-color: var(--accent);
+}
+
+.menu__label {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.menu__desc {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* ── フリート共通フッタ(koho-lens が正本。5 項目・下部固定)──── */
+/* fleet: fixed footer */
+.wrap {
+  padding-bottom: 5.5rem;
+}
+
+.site-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  border-top: 1px solid var(--border);
+  background: var(--surface-1);
+  padding: 0.7rem 1.25rem;
+}
+
+.site-footer__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.1rem;
+  align-items: center;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.site-footer__inner a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.site-footer__inner a:hover {
+  text-decoration: underline;
+}
+
+.site-footer__copy {
+  color: var(--text-muted);
+}
+
+/* fleet: フッタ区切り。規約の並び「MIT License © 2026 坂田哲朗 ・ GitHub ・ … 」の「・」。
+   CSS の ::before では innerText に出ず検品器から見えないので、文字として置いてある。 */
+.fsep {
+  color: currentColor;
+  opacity: 0.45;
+  margin: 0 -0.3rem;
+  user-select: none;
+}
+
+/* 動きを減らす設定を尊重する(SPEC N-06 / 原仕様 §46) */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
