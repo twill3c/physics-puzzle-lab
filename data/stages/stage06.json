@@ -1,0 +1,55 @@
+{
+  "id": 6,
+  "name": "Spring",
+  "difficulty": 3,
+  "theme": "弾性",
+  "hint": "ばねは繋いだ相手を引き寄せる。上から吊れば、ボールは持ち上がる。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 160,
+    "y": 430,
+    "radius": 14
+  },
+  "goal": {
+    "x": 160,
+    "y": 150,
+    "width": 90,
+    "height": 80
+  },
+  "fixedObjects": [
+    {
+      "id": "floor",
+      "kind": "board",
+      "x": 200,
+      "y": 480,
+      "width": 320,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 0,
+    "block": 0,
+    "spring": 1,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "spring",
+      "x": 212.25,
+      "y": 159.32,
+      "angle": 0
+    }
+  ]
+}

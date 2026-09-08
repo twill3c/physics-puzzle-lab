@@ -1,0 +1,85 @@
+{
+  "id": 8,
+  "name": "Pendulum",
+  "difficulty": 3,
+  "theme": "振り子",
+  "hint": "吊られた重りは振れる。振れてきたところへボールを送り込む。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 150,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 640,
+    "y": 456,
+    "width": 110,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "bob",
+      "kind": "block",
+      "x": 330,
+      "y": 300,
+      "width": 54,
+      "height": 54,
+      "angle": 0,
+      "density": 0.004,
+      "friction": 0.3,
+      "restitution": 0.7,
+      "isStatic": false
+    },
+    {
+      "id": "rope",
+      "kind": "spring",
+      "anchorX": 450,
+      "anchorY": 120,
+      "objectId": "bob",
+      "length": 180,
+      "stiffness": 1,
+      "damping": 0
+    },
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 640,
+      "y": 480,
+      "width": 460,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 2,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 200.28,
+      "y": 168.75,
+      "angle": 0.51
+    },
+    {
+      "id": "p2",
+      "kind": "board",
+      "x": 425.58,
+      "y": 376.88,
+      "angle": 0.26
+    }
+  ]
+}

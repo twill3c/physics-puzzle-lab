@@ -1,0 +1,75 @@
+{
+  "id": 5,
+  "name": "Bridge",
+  "difficulty": 2,
+  "theme": "橋",
+  "hint": "足場が途切れている。板を一枚渡せば向こうへ行ける。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 110,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 780,
+    "y": 456,
+    "width": 90,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "left",
+      "kind": "board",
+      "x": 230,
+      "y": 300,
+      "width": 280,
+      "height": 20,
+      "angle": 0.25,
+      "isStatic": true
+    },
+    {
+      "id": "right",
+      "kind": "board",
+      "x": 630,
+      "y": 430,
+      "width": 260,
+      "height": 20,
+      "angle": 0.25,
+      "isStatic": true
+    },
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 790,
+      "y": 480,
+      "width": 220,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 1,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 467.42,
+      "y": 368.86,
+      "angle": 0.17
+    }
+  ]
+}

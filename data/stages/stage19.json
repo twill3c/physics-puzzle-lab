@@ -1,0 +1,55 @@
+{
+  "id": 19,
+  "name": "Limited Objects",
+  "difficulty": 5,
+  "theme": "資源制約",
+  "hint": "使えるのは板が一枚だけ。置き場所がすべてを決める。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 120,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 560,
+    "y": 456,
+    "width": 110,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 560,
+      "y": 480,
+      "width": 320,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 1,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 183.53,
+      "y": 260.87,
+      "angle": 0.57
+    }
+  ]
+}

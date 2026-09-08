@@ -1,0 +1,88 @@
+{
+  "id": 14,
+  "name": "Pulley",
+  "difficulty": 5,
+  "theme": "滑車・張力",
+  "hint": "吊られた台は、重さの偏りで傾く。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 400,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 740,
+    "y": 456,
+    "width": 120,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "deck",
+      "kind": "block",
+      "x": 420,
+      "y": 300,
+      "width": 240,
+      "height": 16,
+      "angle": 0,
+      "density": 0.001,
+      "friction": 0.5,
+      "restitution": 0.1,
+      "isStatic": false
+    },
+    {
+      "id": "ropeL",
+      "kind": "spring",
+      "anchorX": 330,
+      "anchorY": 110,
+      "objectId": "deck",
+      "length": 170,
+      "stiffness": 0.7,
+      "damping": 0.08
+    },
+    {
+      "id": "ropeR",
+      "kind": "spring",
+      "anchorX": 510,
+      "anchorY": 110,
+      "objectId": "deck",
+      "length": 170,
+      "stiffness": 0.7,
+      "damping": 0.08
+    },
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 730,
+      "y": 480,
+      "width": 340,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 0,
+    "block": 1,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 40,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "block",
+      "x": 536.71,
+      "y": 128.74,
+      "angle": 0
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import Matter from "matter-js";
 
-import { CANVAS_HEIGHT, CANVAS_WIDTH, GOAL_DWELL_TICKS } from "@/lib/constants";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, GOAL_DWELL_TICKS, TICKS_PER_SECOND } from "@/lib/constants";
 import type { Stage } from "@/types/stage";
 import type {
   BodyState,
@@ -222,8 +222,8 @@ export class Simulation {
    * 制限時間(秒)を tick に直して上限とする。上限に達したら FAILED を返す ——
    * 「時間切れ」と「まだ動いている」を区別しない。配れるかどうかだけが要るからである。
    */
-  runUntilSettled(): ClearResult {
-    const maxTicks = Math.ceil(this.stage.timeLimit * (1000 / (1000 / 60)));
+  runUntilSettled(maxTicksOverride?: number): ClearResult {
+    const maxTicks = maxTicksOverride ?? Math.ceil(this.stage.timeLimit * TICKS_PER_SECOND);
 
     while (this._status === "RUNNING" && this._tick < maxTicks) {
       this.step();

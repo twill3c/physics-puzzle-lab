@@ -1,0 +1,62 @@
+{
+  "id": 2,
+  "name": "Ramp",
+  "difficulty": 1,
+  "theme": "斜面",
+  "hint": "板を右下がりに傾けると、ボールは坂を下って右へ進む。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 110,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 620,
+    "y": 456,
+    "width": 90,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 640,
+      "y": 480,
+      "width": 400,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 2,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 186.52,
+      "y": 179.22,
+      "angle": 0.43
+    },
+    {
+      "id": "p2",
+      "kind": "board",
+      "x": 334.93,
+      "y": 368.58,
+      "angle": 0.25
+    }
+  ]
+}

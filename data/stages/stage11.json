@@ -1,0 +1,91 @@
+{
+  "id": 11,
+  "name": "Chain Reaction",
+  "difficulty": 4,
+  "theme": "連鎖反応",
+  "hint": "ボールが押した箱が、次の箱を押す。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 130,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 640,
+    "y": 456,
+    "width": 120,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "deck",
+      "kind": "board",
+      "x": 430,
+      "y": 370,
+      "width": 360,
+      "height": 20,
+      "angle": 0.22,
+      "isStatic": true
+    },
+    {
+      "id": "c1",
+      "kind": "block",
+      "x": 380,
+      "y": 330,
+      "width": 30,
+      "height": 30,
+      "angle": 0,
+      "density": 0.0004,
+      "friction": 0.3,
+      "restitution": 0.4,
+      "isStatic": false
+    },
+    {
+      "id": "c2",
+      "kind": "block",
+      "x": 440,
+      "y": 340,
+      "width": 30,
+      "height": 30,
+      "angle": 0,
+      "density": 0.0004,
+      "friction": 0.3,
+      "restitution": 0.4,
+      "isStatic": false
+    },
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 640,
+      "y": 480,
+      "width": 380,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 2,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 152.59,
+      "y": 193.7,
+      "angle": 0.63
+    }
+  ]
+}

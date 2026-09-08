@@ -1,0 +1,75 @@
+{
+  "id": 17,
+  "name": "Multiple Balls",
+  "difficulty": 5,
+  "theme": "多体衝突",
+  "hint": "ゴールに入れるのは白いボールだけ。もう一つは道具として使う。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 150,
+    "y": 70,
+    "radius": 14
+  },
+  "extraBalls": [
+    {
+      "x": 380,
+      "y": 300,
+      "radius": 16,
+      "density": 0.0016,
+      "friction": 0.2,
+      "restitution": 0.6
+    }
+  ],
+  "goal": {
+    "x": 630,
+    "y": 456,
+    "width": 120,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "perch",
+      "kind": "board",
+      "x": 450,
+      "y": 340,
+      "width": 300,
+      "height": 20,
+      "angle": 0.2,
+      "isStatic": true
+    },
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 650,
+      "y": 480,
+      "width": 400,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 2,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 40,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 210.38,
+      "y": 193.96,
+      "angle": 0.11
+    }
+  ]
+}

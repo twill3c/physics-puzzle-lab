@@ -1,0 +1,78 @@
+{
+  "id": 9,
+  "name": "Catapult",
+  "difficulty": 4,
+  "theme": "放物運動・初速度",
+  "hint": "片側に重りを落とすと、てこが傾いてボールは反対へ滑り出す。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 500,
+    "y": 300,
+    "radius": 14
+  },
+  "goal": {
+    "x": 340,
+    "y": 456,
+    "width": 120,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "lever",
+      "kind": "block",
+      "x": 400,
+      "y": 340,
+      "width": 320,
+      "height": 16,
+      "angle": 0,
+      "density": 0.0012,
+      "friction": 0.5,
+      "restitution": 0.2,
+      "isStatic": false
+    },
+    {
+      "id": "pivot",
+      "kind": "spring",
+      "anchorX": 400,
+      "anchorY": 340,
+      "objectId": "lever",
+      "length": 0,
+      "stiffness": 1,
+      "damping": 0.1
+    },
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 340,
+      "y": 480,
+      "width": 300,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 0,
+    "block": 1,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "block",
+      "x": 290.02,
+      "y": 253.16,
+      "angle": 0
+    }
+  ]
+}

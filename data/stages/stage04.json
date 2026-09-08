@@ -1,0 +1,65 @@
+{
+  "id": 4,
+  "name": "Wall",
+  "difficulty": 2,
+  "theme": "入射角・反射角",
+  "hint": "左下がりの面に当たれば、ボールは来た方へ戻される。ゴールは左にある。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 140,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 330,
+    "y": 456,
+    "width": 90,
+    "height": 70
+  },
+  "fixedObjects": [
+    {
+      "id": "deflector",
+      "kind": "board",
+      "x": 570,
+      "y": 330,
+      "width": 260,
+      "height": 20,
+      "angle": -0.5,
+      "isStatic": true
+    },
+    {
+      "id": "shelf",
+      "kind": "board",
+      "x": 330,
+      "y": 480,
+      "width": 340,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    }
+  ],
+  "tools": {
+    "board": 1,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 209.36,
+      "y": 199.81,
+      "angle": 0.2
+    }
+  ]
+}

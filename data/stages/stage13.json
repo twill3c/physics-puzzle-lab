@@ -1,0 +1,63 @@
+{
+  "id": 13,
+  "name": "Elevator",
+  "difficulty": 4,
+  "theme": "上下運動",
+  "hint": "昇降台は決まった周期で上下する。台に乗せれば、ゴールまで運んでくれる。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 140,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 300,
+    "y": 270,
+    "width": 110,
+    "height": 90
+  },
+  "fixedObjects": [
+    {
+      "id": "lift",
+      "kind": "board",
+      "x": 300,
+      "y": 400,
+      "width": 190,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    },
+    {
+      "id": "m1",
+      "kind": "mover",
+      "target": "lift",
+      "motion": "oscillateY",
+      "amplitude": 130,
+      "periodTicks": 360
+    }
+  ],
+  "tools": {
+    "board": 1,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 40,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 216.02,
+      "y": 305.56,
+      "angle": 0.12
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": 12,
+  "name": "Domino",
+  "difficulty": 4,
+  "theme": "運動量伝達",
+  "hint": "倒れた牌は、次の牌へ勢いを渡す。",
+  "world": {
+    "gravityX": 0,
+    "gravityY": 1
+  },
+  "ball": {
+    "x": 130,
+    "y": 70,
+    "radius": 14
+  },
+  "goal": {
+    "x": 620,
+    "y": 366,
+    "width": 120,
+    "height": 80
+  },
+  "fixedObjects": [
+    {
+      "id": "deck",
+      "kind": "board",
+      "x": 450,
+      "y": 400,
+      "width": 520,
+      "height": 20,
+      "angle": 0,
+      "isStatic": true
+    },
+    {
+      "id": "d1",
+      "kind": "block",
+      "x": 330,
+      "y": 355,
+      "width": 14,
+      "height": 70,
+      "angle": 0,
+      "density": 0.0006,
+      "friction": 0.4,
+      "restitution": 0.1,
+      "isStatic": false
+    },
+    {
+      "id": "d2",
+      "kind": "block",
+      "x": 375,
+      "y": 355,
+      "width": 14,
+      "height": 70,
+      "angle": 0,
+      "density": 0.0006,
+      "friction": 0.4,
+      "restitution": 0.1,
+      "isStatic": false
+    },
+    {
+      "id": "d3",
+      "kind": "block",
+      "x": 420,
+      "y": 355,
+      "width": 14,
+      "height": 70,
+      "angle": 0,
+      "density": 0.0006,
+      "friction": 0.4,
+      "restitution": 0.1,
+      "isStatic": false
+    },
+    {
+      "id": "d4",
+      "kind": "block",
+      "x": 465,
+      "y": 355,
+      "width": 14,
+      "height": 70,
+      "angle": 0,
+      "density": 0.0006,
+      "friction": 0.4,
+      "restitution": 0.1,
+      "isStatic": false
+    }
+  ],
+  "tools": {
+    "board": 2,
+    "block": 0,
+    "spring": 0,
+    "fan": 0
+  },
+  "timeLimit": 30,
+  "score": {
+    "gold": 900,
+    "silver": 700,
+    "bronze": 400
+  },
+  "solution": [
+    {
+      "id": "p1",
+      "kind": "board",
+      "x": 185.01,
+      "y": 236.15,
+      "angle": 0.4
+    },
+    {
+      "id": "p2",
+      "kind": "board",
+      "x": 303.11,
+      "y": 313.42,
+      "angle": 0.21
+    }
+  ]
+}
