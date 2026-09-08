@@ -106,8 +106,29 @@ export function validateStage(stage: Stage): StageValidationResult {
     add("score", `ランクしきい値の順序が壊れている(gold ${s.gold} > silver ${s.silver} > bronze ${s.bronze} >= 0 でない)`);
   }
 
+  // ── 追加のボール(原仕様 §22 Stage 17)────────────────────
+  const extras = stage.extraBalls ?? [];
+  extras.forEach((b, i) => {
+    const at = `extraBalls[${i}]`;
+    inRange(b?.x, 0, CANVAS_WIDTH, `${at}.x`, "追加ボールの x 座標");
+    inRange(b?.y, 0, CANVAS_HEIGHT, `${at}.y`, "追加ボールの y 座標");
+
+    if (!isFiniteNumber(b?.radius) || b.radius <= 0) {
+      add(`${at}.radius`, "追加ボールの半径が正の数でない");
+    }
+    if (b?.friction !== undefined) {
+      inRange(b.friction, f.min, f.max, `${at}.friction`, "追加ボールの摩擦");
+    }
+    if (b?.restitution !== undefined) {
+      inRange(b.restitution, r.min, r.max, `${at}.restitution`, "追加ボールの反発");
+    }
+  });
+
   // ── 固定物 ──────────────────────────────────────────────
-  const seenIds = new Set<string>(["ball"]);
+  // 拘束・規定運動が指せる先: 主ボール / 追加ボール / ゴール / 固定物の id。
+  const seenIds = new Set<string>(["ball", "goal"]);
+  extras.forEach((_, i) => seenIds.add(`ball-${i + 2}`));
+
   const objects = stage.fixedObjects ?? [];
 
   objects.forEach((def, i) => {
@@ -124,11 +145,21 @@ export function validateStage(stage: Stage): StageValidationResult {
     validateObject(def, at, { add, inRange, isFiniteNumber });
   });
 
-  // ばねの接続先は、全 id が揃ってから確かめる(前方参照を許すため)。
+  // 参照(ばね・リンク・規定運動)は、全 id が揃ってから確かめる(前方参照を許すため)。
   objects.forEach((def, i) => {
-    if (def?.kind !== "spring") return;
-    if (!seenIds.has(def.objectId)) {
-      add(`fixedObjects[${i}].objectId`, `ばねの接続先 "${def.objectId}" が存在しない`);
+    const at = `fixedObjects[${i}]`;
+
+    if (def?.kind === "spring" && !seenIds.has(def.objectId)) {
+      add(`${at}.objectId`, `ばねの接続先 "${def.objectId}" が存在しない`);
+    }
+
+    if (def?.kind === "link") {
+      if (!seenIds.has(def.bodyA)) add(`${at}.bodyA`, `リンクの接続先 "${def.bodyA}" が存在しない`);
+      if (!seenIds.has(def.bodyB)) add(`${at}.bodyB`, `リンクの接続先 "${def.bodyB}" が存在しない`);
+    }
+
+    if (def?.kind === "mover" && !seenIds.has(def.target)) {
+      add(`${at}.target`, `規定運動の対象 "${def.target}" が存在しない`);
     }
   });
 
@@ -188,6 +219,37 @@ function validateObject(def: PhysicsObjectDefinition, at: string, h: Helpers): v
       if (!h.isFiniteNumber(def.power)) h.add(`${at}.power`, "強さが有限の数でない");
       if (!h.isFiniteNumber(def.range) || def.range < 0) {
         h.add(`${at}.range`, "範囲が 0 以上の数でない");
+      }
+      break;
+
+    case "mover":
+      // 対象の存在は全 id が揃ってから確かめる(呼ぶ側)。ここでは形だけ見る。
+      if (!["oscillateX", "oscillateY", "rotate"].includes(def.motion)) {
+        h.add(`${at}.motion`, `未知の運動 "${def.motion}"`);
+      }
+      // 周期が 0 以下だと 0 除算になる。運動が定義できないので必ず正の数を要求する。
+      if (!h.isFiniteNumber(def.periodTicks) || def.periodTicks <= 0) {
+        h.add(`${at}.periodTicks`, "周期が正の数でない");
+      }
+      // 振幅は振動でのみ使う。負の振幅は位相を半周ずらしただけの重複表現なので禁じる。
+      if (def.motion !== "rotate") {
+        if (!h.isFiniteNumber(def.amplitude) || def.amplitude < 0) {
+          h.add(`${at}.amplitude`, "振幅が 0 以上の数でない");
+        }
+      }
+      if (def.phase !== undefined) {
+        h.inRange(def.phase, 0, 1, `${at}.phase`, "位相");
+      }
+      break;
+
+    case "link":
+      // 接続先の存在は全 id が揃ってから確かめる(呼ぶ側)。
+      if (!h.isFiniteNumber(def.length) || def.length < 0) {
+        h.add(`${at}.length`, "自然長が 0 以上の数でない");
+      }
+      h.inRange(def.stiffness, 0, 1, `${at}.stiffness`, "ばね定数");
+      if (def.damping !== undefined) {
+        h.inRange(def.damping, 0, 1, `${at}.damping`, "減衰");
       }
       break;
 

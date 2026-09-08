@@ -42,6 +42,24 @@ describe("T-021 正常なステージを弾かない — 陰性対照(G-05)", ()
     expect(result.errors).toEqual([]);
   });
 
+  it("規定運動・リンク・複数ボールを含む正常ステージが通る", () => {
+    const stage = makeStage({
+      extraBalls: [{ x: 200, y: 100, radius: 12, density: 0.001, friction: 0.2, restitution: 0.6 }],
+      fixedObjects: [
+        boardAt("lift", 300, 400, 200, 20, 0),
+        { id: "m1", kind: "mover", target: "lift", motion: "oscillateY", amplitude: 80, periodTicks: 120 },
+        { id: "m2", kind: "mover", target: "goal", motion: "oscillateX", amplitude: 100, periodTicks: 200 },
+        { id: "k1", kind: "block", x: 400, y: 100, width: 40, height: 40, density: 0.001, friction: 0.3, restitution: 0.4 },
+        { id: "k2", kind: "block", x: 460, y: 100, width: 40, height: 40, density: 0.001, friction: 0.3, restitution: 0.4 },
+        { id: "l1", kind: "link", bodyA: "k1", bodyB: "k2", length: 60, stiffness: 0.8 },
+        // 主ボール以外を指す拘束も正当(原仕様 §22 Stage 17)。
+        { id: "s1", kind: "spring", anchorX: 200, anchorY: 60, objectId: "ball-2", length: 40, stiffness: 0.5, damping: 0.1 },
+      ],
+    });
+
+    expect(validateStage(stage).errors).toEqual([]);
+  });
+
   it("境界値ちょうどは通る(0 と 1、gravity 5)", () => {
     // 範囲は閉区間として扱う。境界を弾くと、正当なステージが作れなくなる。
     const stage = makeStage({
@@ -133,6 +151,70 @@ describe("T-022 不正値を弾く(G-05)", () => {
         ],
       }),
       path: "fixedObjects[0].range",
+    },
+    {
+      name: "規定運動の対象が存在しない",
+      stage: makeStage({
+        fixedObjects: [
+          { id: "m1", kind: "mover", target: "いない", motion: "oscillateY", amplitude: 50, periodTicks: 120 },
+        ],
+      }),
+      path: "fixedObjects[0].target",
+    },
+    {
+      name: "規定運動の周期が 0",
+      stage: makeStage({
+        fixedObjects: [
+          boardAt("lift", 300, 400),
+          { id: "m1", kind: "mover", target: "lift", motion: "oscillateY", amplitude: 50, periodTicks: 0 },
+        ],
+      }),
+      path: "fixedObjects[1].periodTicks",
+    },
+    {
+      name: "規定運動の振幅が負",
+      stage: makeStage({
+        fixedObjects: [
+          boardAt("lift", 300, 400),
+          { id: "m1", kind: "mover", target: "lift", motion: "oscillateY", amplitude: -10, periodTicks: 120 },
+        ],
+      }),
+      path: "fixedObjects[1].amplitude",
+    },
+    {
+      name: "リンクの接続先が存在しない",
+      stage: makeStage({
+        fixedObjects: [
+          { id: "k1", kind: "block", x: 400, y: 100, width: 40, height: 40, density: 0.001, friction: 0.3, restitution: 0.4 },
+          { id: "l1", kind: "link", bodyA: "k1", bodyB: "いない", length: 60, stiffness: 0.8 },
+        ],
+      }),
+      path: "fixedObjects[1].bodyB",
+    },
+    {
+      name: "リンクの stiffness が範囲外",
+      stage: makeStage({
+        fixedObjects: [
+          { id: "k1", kind: "block", x: 400, y: 100, width: 40, height: 40, density: 0.001, friction: 0.3, restitution: 0.4 },
+          { id: "k2", kind: "block", x: 460, y: 100, width: 40, height: 40, density: 0.001, friction: 0.3, restitution: 0.4 },
+          { id: "l1", kind: "link", bodyA: "k1", bodyB: "k2", length: 60, stiffness: 1.5 },
+        ],
+      }),
+      path: "fixedObjects[2].stiffness",
+    },
+    {
+      name: "追加ボールの座標がはみ出している",
+      stage: makeStage({
+        extraBalls: [{ x: 950, y: 100, radius: 14, density: 0.001, friction: 0.2, restitution: 0.6 }],
+      }),
+      path: "extraBalls[0].x",
+    },
+    {
+      name: "追加ボールの半径が 0",
+      stage: makeStage({
+        extraBalls: [{ x: 200, y: 100, radius: 0, density: 0.001, friction: 0.2, restitution: 0.6 }],
+      }),
+      path: "extraBalls[0].radius",
     },
   ];
 

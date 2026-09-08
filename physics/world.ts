@@ -13,8 +13,9 @@ import type { ClearResult } from "@/types/game";
 
 import { createEngine, gravityPerTick2, resolveWorldParams, stepEngine } from "./engine";
 import { createBall, createBlock, createBoard, createBounds, createGoal } from "./bodies";
-import { createSpring } from "./constraints";
+import { createLink, createSpring } from "./constraints";
 import { applyFanForces } from "./forces";
+import { applyMovers, createMoverBase, type MoverBase } from "./movers";
 import { countCollisionStarts, hasFallenOut, isTouchingGoal } from "./sensors";
 import { placementToDefinition } from "./presets";
 
@@ -52,6 +53,7 @@ export class Simulation {
   private readonly stage: Stage;
   private readonly bodiesById = new Map<string, Matter.Body>();
   private readonly fans: FanDefinition[] = [];
+  private readonly movers: MoverBase[] = [];
 
   private _tick = 0;
   private _collisionCount = 0;
@@ -89,20 +91,46 @@ export class Simulation {
     this.bodiesById.set("ball", this.ball);
     bodies.push(this.ball);
 
-    // 5. ゴール(センサー)
+    // 5. 追加のボール(原仕様 §22 Stage 17)。id は ball-2 から順に振る
+    (opts.stage.extraBalls ?? []).forEach((def, i) => {
+      const body = createBall(def, this.params);
+      this.bodiesById.set(`ball-${i + 2}`, body);
+      bodies.push(body);
+    });
+
+    // 6. ゴール(センサー)
     this.goal = createGoal(opts.stage.goal);
+    this.bodiesById.set("goal", this.goal);
     bodies.push(this.goal);
 
     Matter.Composite.add(this.engine.world, bodies);
 
-    // 6. ばねは相手の Body が揃ってから繋ぐ
-    const springs = [
+    // 7. 拘束は相手の Body が揃ってから繋ぐ
+    const allDefs = [
       ...opts.stage.fixedObjects,
       ...(opts.placements ?? []).map(placementToDefinition),
-    ].filter((d): d is Extract<PhysicsObjectDefinition, { kind: "spring" }> => d.kind === "spring");
+    ];
 
-    for (const def of springs) {
-      Matter.Composite.add(this.engine.world, createSpring(def, (id) => this.bodiesById.get(id)));
+    for (const def of allDefs) {
+      if (def.kind === "spring") {
+        Matter.Composite.add(this.engine.world, createSpring(def, (id) => this.bodiesById.get(id)));
+      } else if (def.kind === "link") {
+        Matter.Composite.add(this.engine.world, createLink(def, (id) => this.bodiesById.get(id)));
+      }
+    }
+
+    // 8. 規定運動も対象の Body が揃ってから登録する
+    for (const def of allDefs) {
+      if (def.kind !== "mover") continue;
+
+      const target = this.bodiesById.get(def.target);
+      if (!target) {
+        throw new Error(
+          `mover "${def.id}" の対象 "${def.target}" が見つからない。` +
+            `ステージ検証を通っていれば起きえない(physics/world.ts)`,
+        );
+      }
+      this.movers.push(createMoverBase(def, target));
     }
   }
 
@@ -125,7 +153,9 @@ export class Simulation {
         this.fans.push(def);
         break;
       case "spring":
-        // 相手の Body が揃ってから繋ぐので、ここでは何もしない。
+      case "link":
+      case "mover":
+        // 相手・対象の Body が揃ってから繋ぐので、ここでは何もしない。
         break;
     }
   }
@@ -149,6 +179,11 @@ export class Simulation {
   /** 1 tick 進める。 */
   step(): void {
     if (this._status !== "RUNNING") return;
+
+    // 規定運動は積分の前に置き直す。そうしないと、ボールは
+    // 「1 tick 前の台の位置」に対して解かれてしまう。
+    // 渡すのはこれから進める tick 番号(1 始まり)。
+    applyMovers(this.movers, this._tick + 1);
 
     // 送風は積分の前に加える。matter-js は update のたびに force を消すので、
     // 毎 tick 加え直す必要がある(原仕様 §52)。

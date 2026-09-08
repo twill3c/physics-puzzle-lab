@@ -92,12 +92,53 @@ export interface GoalDefinition {
   height: number;
 }
 
+/**
+ * 規定運動。原仕様 §22 の Stage 13(Elevator)/ 15(Rotating Platform)/ 18(Moving Goal)。
+ *
+ * **位置と角度を tick の純関数として与える。** 力を加えるのではなく、毎 tick
+ * 「その時刻にあるべき場所」へ置き直す。状態を積み上げないので、途中から始めても、
+ * 何度走らせても同じ運動になる —— 決定論(SPEC D-01)を壊さないための形である。
+ *
+ * 対象は `target` の id で指す。`"goal"` を指定するとゴールが動く。
+ */
+export interface MoverDefinition {
+  id: string;
+  kind: "mover";
+  /** 動かす対象の id。`"goal"` でゴール。 */
+  target: string;
+  motion: "oscillateX" | "oscillateY" | "rotate";
+  /** 振動の片振幅(px)。`rotate` では使わない。 */
+  amplitude?: number;
+  /** 1 周期にかかる tick 数。 */
+  periodTicks: number;
+  /** 位相(0〜1)。0 なら基準位置から始まる。 */
+  phase?: number;
+}
+
+/**
+ * 物体どうしを繋ぐ拘束。原仕様 §22 の Stage 14(Pulley 滑車・張力)。
+ *
+ * `spring` が「点と物体」を繋ぐのに対し、これは「物体と物体」を繋ぐ。
+ * `stiffness` を 1 に近づけると綱、小さくするとばねとして振る舞う。
+ */
+export interface LinkDefinition {
+  id: string;
+  kind: "link";
+  bodyA: string;
+  bodyB: string;
+  length: number;
+  stiffness: number;
+  damping?: number;
+}
+
 /** ステージ JSON の `fixedObjects` に載りうる定義の総和。 */
 export type PhysicsObjectDefinition =
   | BoardDefinition
   | BlockDefinition
   | SpringDefinition
-  | FanDefinition;
+  | FanDefinition
+  | MoverDefinition
+  | LinkDefinition;
 
 /**
  * プレイヤーが置いた部品 1 個(SPEC §8「配置」)。

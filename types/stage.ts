@@ -33,6 +33,17 @@ export interface Stage {
 
   ball: BallDefinition;
 
+  /**
+   * 追加のボール。原仕様 §22 の Stage 17(Multiple Balls 多体衝突)。
+   *
+   * **ゴール判定は主ボール(`ball`)だけを見る。** どの球でもよいことにすると、
+   * 「多体衝突を利用して主ボールを運ぶ」という面の狙いが消え、
+   * 「球をどれか一つ放り込む」面になってしまう。
+   *
+   * id は `ball-2`, `ball-3`, … が順に振られる(主ボールが `ball`)。
+   */
+  extraBalls?: BallDefinition[];
+
   goal: GoalDefinition;
 
   /** ステージが最初から置いている物。スコアの ObjectPenalty には数えない。 */
