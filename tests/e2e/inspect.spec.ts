@@ -21,8 +21,11 @@ test("検品用の撮影", async ({ page }) => {
   const shots: [string, { width: number; height: number }, string][] = [
     ["/game?stage=5", { width: 1280, height: 900 }, "desktop-game"],
     ["/stages", { width: 1280, height: 900 }, "desktop-stages"],
+    ["/lab", { width: 1280, height: 900 }, "desktop-lab"],
+    ["/how-to-play", { width: 1280, height: 900 }, "desktop-howto"],
     ["/game?stage=2", { width: 390, height: 820 }, "mobile-game"],
     ["/stages", { width: 390, height: 820 }, "mobile-stages"],
+    ["/lab", { width: 390, height: 820 }, "mobile-lab"],
   ];
 
   for (const [path, size, name] of shots) {

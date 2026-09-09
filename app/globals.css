@@ -368,3 +368,54 @@ a.stagecard:hover { border-color: var(--accent); background: var(--surface-2); }
   .palette { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
   .toolbar__status { margin-left: 0; width: 100%; }
 }
+
+/* ── Lab Mode(原仕様 §30-§35)─────────────────────────── */
+.lab-body { display: grid; grid-template-columns: 1fr 300px; gap: 1.25rem; align-items: start; }
+.lab-main, .lab-side { min-width: 0; }
+
+.lab-toggle { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; color: var(--text-secondary); font-size: 0.88rem; cursor: pointer; }
+
+.lab-readouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.55rem; margin: 1rem 0 0; }
+.lab-readouts dt { color: var(--text-muted); font-size: 0.7rem; letter-spacing: 0.06em; }
+.lab-readouts dd { margin: 0.1rem 0 0; font-variant-numeric: tabular-nums; font-size: 0.98rem; }
+.lab-unit { color: var(--text-muted); font-size: 0.75rem; }
+
+.lab-presets { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+
+.lab-preset {
+  min-height: 44px;
+  padding: 0 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.lab-preset:hover { border-color: var(--accent); background: var(--surface-2); }
+
+.lab-slider { margin-bottom: 0.9rem; }
+.lab-slider label { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-bottom: 0.15rem; }
+.lab-slider__label { font-size: 0.85rem; }
+.lab-slider__value { color: var(--accent); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
+.lab-slider__note { display: block; color: var(--text-muted); font-size: 0.72rem; line-height: 1.5; margin-top: 0.15rem; }
+.lab-slider input[type="range"] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+
+/* ── 文章のページ(About / 遊び方 / ライセンス)──────────── */
+.prose { max-width: 760px; }
+.prose h2 { margin-top: 2.2rem; }
+.prose p { margin: 0.7rem 0; }
+.prose ul { padding-left: 1.3rem; margin: 0.7rem 0; }
+.prose li { margin: 0.35rem 0; }
+.prose code { background: var(--surface-2); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.88em; }
+.prose kbd { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 0.05rem 0.35rem; font-size: 0.82em; color: var(--text-secondary); }
+
+.prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; display: block; overflow-x: auto; }
+.prose th, .prose td { border: 1px solid var(--border); padding: 0.45rem 0.7rem; text-align: left; font-size: 0.9rem; vertical-align: top; }
+.prose th { background: var(--surface-1); color: var(--text-secondary); font-weight: 600; white-space: nowrap; }
+
+@media (max-width: 780px) {
+  .lab-body { grid-template-columns: 1fr; }
+}
