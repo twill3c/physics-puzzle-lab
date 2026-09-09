@@ -80,6 +80,16 @@ describe("T-002 ゲート被覆検査そのものの検査(G-00)", () => {
     expect(findGateCoverageViolations(gates, refs).uncovered).toEqual([]);
   });
 
+  it("実ブラウザのケース(E-xx)からの参照も数える", () => {
+    // 実ブラウザ検品も同じくゲートを担う。ここを数え落とすと、
+    // E2E でしか確かめられないゲート(G-14 など)が「参照なし」に見える。
+    const gates = parseSpecGates(specWith("| G-81 | 実ブラウザで見るゲート | 落とす | 実装済み |"));
+    const refs = parseTestSpecRefs(testSpecWith("| E-06 | F-27 / G-81 | 幅を変えて測る | 溢れない |"));
+
+    expect(refs.has("G-81")).toBe(true);
+    expect(findGateCoverageViolations(gates, refs).uncovered).toEqual([]);
+  });
+
   it("SPEC に無いゲートへの参照を dangling として捕まえる", () => {
     const gates = parseSpecGates(specWith("| G-80 | 実在するゲート | 落とす | 実装済み |"));
     const refs = parseTestSpecRefs(testSpecWith("| T-903 | G-80 / G-99 | 誤記を含むケース | 通る |"));

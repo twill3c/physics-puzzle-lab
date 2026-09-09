@@ -74,10 +74,14 @@ export function parseSpecGates(specText: string): SpecGate[] {
 /**
  * TEST_SPEC 本文から、ケースが参照しているゲート ID を集める。
  *
- * 拾うのは「1 列目が `T-xxx` の表の行の、2 列目(対応要求)」。
+ * 拾うのは「1 列目がケース ID の表の行の、2 列目(対応要求)」。
+ * ケース ID は `T-xxx`(単体)と `E-xx`(実ブラウザ)の二系統がある ——
+ * 実ブラウザ検品も同じくゲートを担うので、両方を数える。
  * 見出しや散文での言及は拾わない —— ケース表に書かれていることを要求するのが
  * この検査の趣旨だからである。
  */
+const CASE_ID = /^[TE]-\d+$/;
+
 export function parseTestSpecRefs(testSpecText: string): Set<string> {
   const refs = new Set<string>();
 
@@ -85,7 +89,7 @@ export function parseTestSpecRefs(testSpecText: string): Set<string> {
     const cells = splitRow(line);
     if (!cells || isSeparatorRow(cells)) continue;
 
-    if (!/^T-\d+$/.test(cells[0])) continue;
+    if (!CASE_ID.test(cells[0])) continue;
 
     for (const match of cells[1].matchAll(GATE_ID)) {
       refs.add(match[0]);

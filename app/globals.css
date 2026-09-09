@@ -198,3 +198,173 @@ h2 {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── ゲーム画面(原仕様 §9 / §43)───────────────────────── */
+.game-layout { max-width: 1180px; }
+
+.game-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.game-title { font-size: 1.3rem; margin: 0 0 0.25rem; }
+.game-theme { color: var(--accent); font-weight: 700; }
+
+.game-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.game-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.game-nav__link--next { border-color: var(--accent); color: var(--accent); }
+.game-nav__link:hover { background: var(--surface-2); }
+
+.game-body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-areas:
+    "side canvas"
+    "side toolbar"
+    "side score";
+  gap: 1.25rem 1.25rem;
+  align-items: start;
+}
+
+/* グリッドの子は min-width:auto が既定なので、中身(900px の Canvas)より
+   小さくならない。これを外さないと列が縮まず、ページごと横に溢れる。
+   実測 2026-09-10: 未指定だと 375px 幅で 545px、768px 幅で 152px 溢れた。 */
+.game-main, .game-side { min-width: 0; }
+.game-side__title { font-size: 0.85rem; letter-spacing: 0.12em; color: var(--text-muted); margin: 0 0 0.6rem; }
+.game-hint { margin-top: 0.9rem; line-height: 1.6; }
+
+/* 図は横に溢れさせない。溢れる場合は図自身の中でスクロールさせる */
+.canvas-wrap { width: 100%; overflow-x: auto; }
+.game-canvas { display: block; border: 1px solid var(--border); border-radius: 10px; touch-action: none; }
+
+/* ── パレット(原仕様 §19)─────────────────────────────── */
+.palette { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.palette__empty { color: var(--text-muted); font-size: 0.85rem; }
+
+.palette__item {
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+  min-height: 64px;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-1);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.palette__item--active { border-color: var(--accent); background: var(--surface-2); }
+.palette__item:disabled { opacity: 0.45; cursor: not-allowed; }
+.palette__label { font-weight: 700; letter-spacing: 0.06em; }
+.palette__count { color: var(--accent); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
+.palette__desc { color: var(--text-muted); font-size: 0.78rem; }
+
+/* ── 操作バー(原仕様 §9 / §45 / §46)──────────────────── */
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.9rem; }
+
+.toolbar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.toolbar__btn--primary { border-color: var(--accent); color: var(--accent); }
+.toolbar__btn:hover:not(:disabled) { background: var(--surface-2); }
+.toolbar__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.toolbar__key {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  background: var(--bg);
+}
+
+.toolbar__status { margin-left: auto; color: var(--text-secondary); font-size: 0.88rem; }
+
+/* ── 成績(原仕様 §25)─────────────────────────────────── */
+.score { margin-top: 1rem; }
+.score__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.6rem; margin: 0; }
+.score__grid dt { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.08em; }
+.score__grid dd { margin: 0.1rem 0 0; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+
+.score__result { margin-top: 0.9rem; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-1); }
+.score__rank { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: 0.08em; }
+.score__rank[data-rank="GOLD"] { color: var(--gold); }
+.score__rank[data-rank="SILVER"] { color: var(--silver); }
+.score__rank[data-rank="BRONZE"] { color: var(--bronze); }
+.score__total { margin: 0.2rem 0 0; font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.score__detail { margin: 0.3rem 0 0; }
+
+/* ── ステージ一覧(原仕様 §39)─────────────────────────── */
+.stages { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.7rem; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+
+.stagecard {
+  display: grid;
+  gap: 0.2rem;
+  min-height: 110px;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-1);
+  color: var(--text);
+  text-decoration: none;
+}
+
+a.stagecard:hover { border-color: var(--accent); background: var(--surface-2); }
+.stagecard--locked { opacity: 0.5; }
+.stagecard__no { font-size: 0.7rem; letter-spacing: 0.1em; color: var(--text-muted); }
+.stagecard__name { font-weight: 700; }
+.stagecard__theme { font-size: 0.8rem; color: var(--text-secondary); }
+.stagecard__state { font-size: 0.78rem; letter-spacing: 0.06em; font-weight: 700; }
+.stagecard__state[data-state="GOLD"] { color: var(--gold); }
+.stagecard__state[data-state="SILVER"] { color: var(--silver); }
+.stagecard__state[data-state="BRONZE"] { color: var(--bronze); }
+.stagecard__state[data-state="NEW"] { color: var(--accent); }
+.stagecard__state[data-state="LOCKED"] { color: var(--text-muted); }
+.stagecard__best { color: var(--text-secondary); font-weight: 400; }
+.stagecard__diff { font-size: 0.8rem; color: var(--accent-warm); letter-spacing: 0.1em; }
+.stagecard__diff-off { color: var(--border); }
+
+/* ── 狭い画面(原仕様 §43)─────────────────────────────── */
+@media (max-width: 780px) {
+  /* 原仕様 §43 の並び: Canvas → Bottom Tool Palette → Control Buttons */
+  .game-body {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "canvas"
+      "side"
+      "toolbar"
+      "score";
+  }
+  .palette { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .toolbar__status { margin-left: 0; width: 100%; }
+}
