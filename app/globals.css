@@ -146,6 +146,17 @@ h2 {
   padding-bottom: 5.5rem;
 }
 
+/*
+  5 項目にすると、540px 未満でフッタが 3 行に折り返して 97px になり、
+  5.5rem(88px)の逃げでは本文の末尾が隠れる(loop_009 に 9 幅 × 4 画面で実測)。
+  540px 以上では 71px 以下に収まる。
+*/
+@media (max-width: 539px) {
+  .wrap {
+    padding-bottom: 7.5rem;
+  }
+}
+
 .site-footer {
   position: fixed;
   left: 0;

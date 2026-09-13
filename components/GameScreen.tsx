@@ -136,6 +136,7 @@ export default function GameScreen({ stageId }: { stageId: number }) {
 
   const editable = game.status !== "RUNNING" && game.status !== "PAUSED";
   const nextStage = stage.id < stageCount() ? stage.id + 1 : null;
+  const selected = selectedId ? (game.placements.find((p) => p.id === selectedId) ?? null) : null;
 
   return (
     <main className="wrap game-layout">
@@ -176,9 +177,35 @@ export default function GameScreen({ stageId }: { stageId: number }) {
             onSelect={setActiveTool}
             disabled={!editable}
           />
+          {/*
+            回転の手段を Shift+ドラッグだけにすると、タッチ端末では板を傾けられない(SPEC D-14)。
+            解答の角度は小数 2 桁の rad で持っているので、0.01 刻みならどの解答の角度にも届く。
+          */}
+          {selected && editable && (
+            <div className="lab-slider game-angle">
+              <label htmlFor="part-angle">
+                <span className="lab-slider__label">角度</span>
+                <span className="lab-slider__value">
+                  {selected.angle.toFixed(2)} rad({Math.round((selected.angle * 180) / Math.PI)}°)
+                </span>
+              </label>
+              <input
+                id="part-angle"
+                type="range"
+                min={-3.14}
+                max={3.14}
+                step={0.01}
+                value={selected.angle}
+                onChange={(e) => {
+                  game.rotate(selected.id, Number(e.target.value));
+                  onChange();
+                }}
+              />
+            </div>
+          )}
           <p className="muted game-hint">
             空いている所を押すと置ける。置いた部品はドラッグで動かせる。
-            Shift を押しながらドラッグすると回る。
+            回すときは、部品を選んで「角度」を動かす(マウスなら Shift を押しながらドラッグしても回る)。
           </p>
         </aside>
 
