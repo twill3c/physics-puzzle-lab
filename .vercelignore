@@ -1,0 +1,32 @@
+# Vercel へ送らないもの。
+#
+# Free プランは 24 時間あたり 5,000 ファイルが上限で、一度触れると 24 時間通らなくなる。
+# 実測 2026-09-14: node_modules だけで 19,790 ファイル。追跡中の出荷物は 114 ファイル。
+#
+# **パターンは先頭を / で固定する**(メモリ: vercel-deploy-quirks / HC-260)。
+# 無印のパターンは深い階層にも当たる —— folksound-atlas は `data` と書いて
+# public/data を消した。本プロジェクトは data/stages をビルドが読むので、
+# data は**ここに書かない**。
+#
+# **削った後の木でビルドできることを確かめてから足すこと**(HC-062)。
+
+/node_modules
+/.next
+/out
+/.git
+
+# 検査と記録(出荷物に関与しない)
+/tests
+/harness
+/schema
+/logs
+/coverage
+/test-results
+/playwright-report
+/vitest.config.ts
+/playwright.config.ts
+
+# スキャフォールドの管理領域
+/.scaffold
+/.wt
+/.github
