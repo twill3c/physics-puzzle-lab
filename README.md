@@ -5,6 +5,9 @@
 2D 物理シミュレーションの上でボールをゴールへ導くパズルと、重力・摩擦・反発を
 自由に動かせる実験室(Lab Mode)。すべてブラウザ内で動き、サーバも DB も外部 API も持たない。
 
+本番: https://physics-puzzle-lab-gamma.vercel.app
+(素の `physics-puzzle-lab.vercel.app` は割り当てられず、Vercel が `-gamma` つきの別名を自動で付けた)
+
 ## 特徴
 
 - 20 ステージの物理パズル(重力・斜面・反発・ばね・送風・てこ・振り子・滑車 …)
