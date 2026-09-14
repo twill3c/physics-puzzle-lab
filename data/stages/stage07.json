@@ -14,9 +14,9 @@
     "radius": 14
   },
   "goal": {
-    "x": 720,
+    "x": 683,
     "y": 456,
-    "width": 90,
+    "width": 164,
     "height": 70
   },
   "fixedObjects": [

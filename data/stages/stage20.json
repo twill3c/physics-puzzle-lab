@@ -14,9 +14,9 @@
     "radius": 14
   },
   "goal": {
-    "x": 780,
+    "x": 755,
     "y": 456,
-    "width": 120,
+    "width": 170,
     "height": 70
   },
   "fixedObjects": [
@@ -25,7 +25,7 @@
       "kind": "board",
       "x": 330,
       "y": 250,
-      "width": 220,
+      "width": 300,
       "height": 20,
       "angle": 0.3,
       "isStatic": true
@@ -70,16 +70,16 @@
     {
       "id": "p1",
       "kind": "board",
-      "x": 194.79,
-      "y": 110.83,
-      "angle": 0.23
+      "x": 170.17,
+      "y": 178.4,
+      "angle": 0.09
     },
     {
       "id": "p2",
       "kind": "board",
-      "x": 778.94,
-      "y": 463.09,
-      "angle": -0.11
+      "x": 640.47,
+      "y": 469.77,
+      "angle": -0.18
     }
   ]
 }

@@ -15,19 +15,29 @@ import { computeScore } from "@/game/scoreManager";
  * 主張するのは**最終状態とスコアの一致**であって、描画の一致ではない。
  */
 
-/** 記録つきで 1 回遊ぶ。編集して、動かして、片付けて、開始する。 */
+/**
+ * 記録つきで 1 回遊ぶ。編集して、動かして、片付けて、開始する。
+ *
+ * 最後に動かす先は**stage02 の同梱解答から引く**。数を写して書くと、解答を置き直したとき
+ * (loop_010 で G-15 のために置き直した)この操作列だけが古い解答をなぞり続け、
+ * 「復元した配置が解答と一致する」が実装と無関係に落ちる。
+ */
 function playSession() {
   const stage = getStage(2);
+  if (stage.solution.length !== 2) {
+    throw new Error(`この操作列は stage02 の解答が 2 部品であることを前提にしている(実際 ${stage.solution.length})`);
+  }
+  const [s1, s2] = stage.solution;
   const rec = createRecorder(stage.id);
 
   rec.create("a", "board", 300, 200, 0.3);
   rec.create("b", "board", 500, 350, 0.1);
-  rec.move("a", 186.52, 179.22);
-  rec.rotate("a", 0.43);
+  rec.move("a", s1.x, s1.y);
+  rec.rotate("a", s1.angle);
   rec.create("c", "board", 700, 400, 0);
   rec.delete("c");
-  rec.move("b", 334.93, 368.58);
-  rec.rotate("b", 0.25);
+  rec.move("b", s2.x, s2.y);
+  rec.rotate("b", s2.angle);
   rec.start();
 
   return { stage, replay: rec.build() };
@@ -35,16 +45,21 @@ function playSession() {
 
 describe("T-050 操作ログから配置を復元できる(G-03)", () => {
   it("CREATE / MOVE / ROTATE / DELETE を畳んだ結果が最終配置になる", () => {
-    const { replay } = playSession();
+    const { stage, replay } = playSession();
     const placements = placementsFromEvents(replay.events);
 
     // 消した c は残らない。
     expect(placements.map((p) => p.id).sort()).toEqual(["a", "b"]);
 
+    // 前提: 置いた直後の値と最後に動かした先が違う(同じなら「最後が効く」を見分けられない)。
+    const s1 = stage.solution[0];
+    expect(s1.x).not.toBe(300);
+    expect(s1.angle).not.toBe(0.3);
+
     // 最後の MOVE / ROTATE が効いている。
     const a = placements.find((p) => p.id === "a")!;
-    expect(a.x).toBe(186.52);
-    expect(a.angle).toBe(0.43);
+    expect(a.x).toBe(s1.x);
+    expect(a.angle).toBe(s1.angle);
   });
 
   it("復元した配置は、その面の同梱解答と一致する", () => {

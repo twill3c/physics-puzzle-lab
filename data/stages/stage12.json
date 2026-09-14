@@ -14,9 +14,9 @@
     "radius": 14
   },
   "goal": {
-    "x": 620,
+    "x": 625,
     "y": 366,
-    "width": 120,
+    "width": 130,
     "height": 80
   },
   "fixedObjects": [
@@ -27,17 +27,17 @@
       "y": 400,
       "width": 520,
       "height": 20,
-      "angle": 0,
+      "angle": 0.06,
       "isStatic": true
     },
     {
       "id": "d1",
       "kind": "block",
-      "x": 330,
-      "y": 355,
+      "x": 332.1,
+      "y": 347.7,
       "width": 14,
       "height": 70,
-      "angle": 0,
+      "angle": 0.06,
       "density": 0.0006,
       "friction": 0.4,
       "restitution": 0.1,
@@ -46,11 +46,11 @@
     {
       "id": "d2",
       "kind": "block",
-      "x": 375,
-      "y": 355,
+      "x": 377.1,
+      "y": 350.4,
       "width": 14,
       "height": 70,
-      "angle": 0,
+      "angle": 0.06,
       "density": 0.0006,
       "friction": 0.4,
       "restitution": 0.1,
@@ -59,11 +59,11 @@
     {
       "id": "d3",
       "kind": "block",
-      "x": 420,
-      "y": 355,
+      "x": 422.1,
+      "y": 353.1,
       "width": 14,
       "height": 70,
-      "angle": 0,
+      "angle": 0.06,
       "density": 0.0006,
       "friction": 0.4,
       "restitution": 0.1,
@@ -72,15 +72,28 @@
     {
       "id": "d4",
       "kind": "block",
-      "x": 465,
-      "y": 355,
+      "x": 467.1,
+      "y": 355.8,
       "width": 14,
       "height": 70,
-      "angle": 0,
+      "angle": 0.06,
       "density": 0.0006,
       "friction": 0.4,
       "restitution": 0.1,
       "isStatic": false
+    },
+    {
+      "id": "stop",
+      "kind": "block",
+      "x": 702,
+      "y": 374.6,
+      "width": 12,
+      "height": 60,
+      "angle": 0.06,
+      "density": 0.001,
+      "friction": 0.3,
+      "restitution": 0.1,
+      "isStatic": true
     }
   ],
   "tools": {
@@ -99,16 +112,16 @@
     {
       "id": "p1",
       "kind": "board",
-      "x": 185.01,
-      "y": 236.15,
-      "angle": 0.4
+      "x": 212.26,
+      "y": 105.7,
+      "angle": 0.21
     },
     {
       "id": "p2",
       "kind": "board",
-      "x": 303.11,
-      "y": 313.42,
-      "angle": 0.21
+      "x": 295.45,
+      "y": 319.47,
+      "angle": 0.44
     }
   ]
 }
