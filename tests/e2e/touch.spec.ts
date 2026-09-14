@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { test, expect, devices, type Page, type Locator } from "@playwright/test";
 
 /**
@@ -154,5 +157,87 @@ test.describe("タッチ操作(F-29)", () => {
 
     await page.touchscreen.tap(R.x, R.y);
     await expect(del, "回した軸の上に板が無い = スライダーが物理に届いていない").toBeEnabled();
+  });
+});
+
+/**
+ * E-19 / E-20 — 指の操作だけで面を解き切る(loop_011)。
+ *
+ * E-17・E-18 は「置ける・動かせる・回せる」を一つずつ確かめ、G-15 は「指の精度でずらしても
+ * 物理の上で解ける」を無頭で確かめる。どちらも**組み合わせたときに解けること**までは言わない。
+ * ここでは実機相当の端末で、同梱解答をタップと角度スライダーだけで置き、Start を押して
+ * クリアの表示が出るまでを一続きで見る。
+ *
+ * 解答は面データの JSON から読む(数を写すと、解答を置き直したときに古い解答をなぞり続ける)。
+ * 座標は論理 → 画面(× 拡大率 + Canvas の左上)で出し、丸めない。指の誤差は G-15 が受け持つ。
+ */
+interface SolutionPart {
+  kind: string;
+  x: number;
+  y: number;
+  angle: number;
+}
+
+function loadSolution(stageId: number): { parts: SolutionPart[]; timeLimit: number; tools: Record<string, number> } {
+  const file = join(process.cwd(), "data", "stages", `stage${String(stageId).padStart(2, "0")}.json`);
+  const stage = JSON.parse(readFileSync(file, "utf8"));
+  return { parts: stage.solution, timeLimit: stage.timeLimit, tools: stage.tools };
+}
+
+/** 同梱解答の部品を、道具を選んでタップし、角度スライダーで傾けて置く。 */
+async function placeByTouch(page: Page, part: SolutionPart, setAngle: boolean) {
+  const tool = page.getByRole("button", { name: new RegExp(part.kind.toUpperCase()) });
+  if ((await tool.getAttribute("aria-pressed")) !== "true") await tool.tap();
+  await expect(tool).toHaveAttribute("aria-pressed", "true");
+
+  const canvas = page.locator("canvas.game-canvas");
+  await canvas.scrollIntoViewIfNeeded();
+  const box = (await canvas.boundingBox())!;
+  const scale = box.width / 900;
+  await page.touchscreen.tap(box.x + part.x * scale, box.y + part.y * scale);
+
+  // 置いた直後はその部品が選ばれていて、角度スライダーが出る。
+  const angle = page.getByLabel("角度");
+  await expect(angle, "置いた部品が選択されていない = タップが配置に届いていない").toBeVisible();
+  if (setAngle) await angle.fill(String(part.angle));
+}
+
+async function solveStageByTouch(page: Page, stageId: number, setAngle: boolean) {
+  const { parts, tools } = loadSolution(stageId);
+  await page.goto(`/game?stage=${stageId}`);
+  expect(await page.evaluate(() => navigator.maxTouchPoints > 0)).toBe(true);
+
+  for (const part of parts) await placeByTouch(page, part, setAngle);
+
+  // 操作が届いた証拠: 置いた数だけ残数が減っている(HC-138)。
+  for (const kind of new Set(parts.map((p) => p.kind))) {
+    const used = parts.filter((p) => p.kind === kind).length;
+    await expect(page.getByRole("button", { name: new RegExp(kind.toUpperCase()) })).toContainText(
+      `${tools[kind] - used} / ${tools[kind]}`,
+    );
+  }
+
+  await page.getByRole("button", { name: /^Start/ }).tap();
+  await expect(page.getByRole("status").first()).toContainText("実行中");
+}
+
+test.describe("指だけで解き切る(F-29 / G-15)", () => {
+  test.setTimeout(90_000);
+
+  test("E-19 stage02 Ramp を、タップと角度スライダーだけでクリアできる", async ({ page }) => {
+    const { timeLimit } = loadSolution(2);
+    await solveStageByTouch(page, 2, true);
+    await expect(page.getByRole("status").first()).toContainText("クリア", {
+      timeout: timeLimit * 1500,
+    });
+  });
+
+  test("E-20 陽性対照: 同じ手順で角度だけ変えなければ、クリアせず失敗になる", async ({ page }) => {
+    // 何を置いてもクリアする画面なら E-19 は無条件に通る。クリアが配置に依存していることを示す。
+    const { timeLimit } = loadSolution(2);
+    await solveStageByTouch(page, 2, false);
+    await expect(page.getByRole("status").first()).toContainText("失敗", {
+      timeout: timeLimit * 1500,
+    });
   });
 });
