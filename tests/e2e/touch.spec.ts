@@ -241,3 +241,41 @@ test.describe("指だけで解き切る(F-29 / G-15)", () => {
     });
   });
 });
+
+/**
+ * E-21 / E-22 — 板以外の部品も、指で置いて物理に届く(loop_012)。
+ *
+ * 同梱解答が使う部品の種類は board / block / spring / fan の 4 つ。板は E-19 で済んでいるので、
+ * 板以外を使う面をすべて並べる: Spring(06・ばね)・Catapult(09・箱)・Fan(10・送風)・Pulley(14・箱)。
+ *
+ * **ばねと送風は Body を持たない。** 置いても画面に当たり判定の形が無く、残数が減ったことは
+ * 「配置の一覧に入った」ことしか示さない。そこで各面に陽性対照 E-22(部品を置かずに Start → 失敗)を
+ * 対で置き、「置けばクリア・置かなければ失敗」で、置いた部品が物理に届いたと言う。
+ */
+const NON_BOARD_STAGES = [6, 9, 10, 14];
+
+test.describe("板以外の部品も指で置いて解き切る(F-29 / G-15)", () => {
+  test.setTimeout(120_000);
+
+  for (const id of NON_BOARD_STAGES) {
+    const { parts, timeLimit } = loadSolution(id);
+    const label = `stage${String(id).padStart(2, "0")}(${[...new Set(parts.map((p) => p.kind))].join("・")})`;
+
+    test(`E-21 ${label} を、タップと角度スライダーだけでクリアできる`, async ({ page }) => {
+      await solveStageByTouch(page, id, true);
+      await expect(page.getByRole("status").first()).toContainText("クリア", {
+        timeout: timeLimit * 1500,
+      });
+    });
+
+    test(`E-22 陽性対照: ${label} は部品を置かずに Start すると失敗になる`, async ({ page }) => {
+      await page.goto(`/game?stage=${id}`);
+      expect(await page.evaluate(() => navigator.maxTouchPoints > 0)).toBe(true);
+      await page.getByRole("button", { name: /^Start/ }).tap();
+      await expect(page.getByRole("status").first()).toContainText("実行中");
+      await expect(page.getByRole("status").first()).toContainText("失敗", {
+        timeout: timeLimit * 1500,
+      });
+    });
+  }
+});
